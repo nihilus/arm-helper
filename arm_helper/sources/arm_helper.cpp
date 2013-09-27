@@ -77,132 +77,6 @@ void idaapi IDAP_term ( void )
   // msg("IDAP_term\n");
 }
 
-static const char strStartItem[] = "STARTITEM 0\n";
-static const char strHelp[] = "HELP\n";
-static const char strEndHelp[] = "ENDHELP\n";
-
-static const char strArchitectureTitle[] = "Select ARM Architecture\n\n";
-static const char strArchitectureHelp[] = "Select ARM Architecture\n";
-
-enum
-{
-  ARM_TYPE_DEVICE = 0,
-  ARM_TYPE_ARM7_ARM9,
-  ARM_TYPE_CORTEX_M0_M1,
-  ARM_TYPE_CORTEX_M3_M4,
-  ARM_ARCH_COUNT
-};
-
-static const char architectures[ARM_ARCH_COUNT ][24] =
-{
-  "Architecture By Device ",  //
-  "ARMv4T (ARM7/ARM9)     ",  // ARMv4 : ARM only, ARMv4T : ARM + Thumb
-  "ARMv6-M (CORTEX-M0/M1) ",  // Thumb + Thumb-2 : BL, MRS, MSR, ISB, DSB, DMB
-  "ARMv7-M (CORTEX-M3/M4) ",  // Thumb + Thumb-2, M4 : DSP, M4F : FPv4
-};
-
-static int idaapi selectArchitecture ( int * pArchitecture )
-{
-  char dialog_form[MAXSTR * 8];
-  char * dest = dialog_form;
-
-  // where number is a number of input field the cursor will stand on (0 based)
-  dest = qstpncpy ( dest, strStartItem, sizeof ( strStartItem ) );
-
-  // Help
-  dest = qstpncpy ( dest, strHelp, sizeof ( strHelp ) );
-  dest = qstpncpy ( dest, strArchitectureHelp,
-                    sizeof ( strArchitectureHelp ) );
-  dest = qstpncpy ( dest, strEndHelp, sizeof ( strEndHelp ) );
-
-  // Title : Next there must be the title line and 2 empty lines
-  dest = qstpncpy ( dest, strArchitectureTitle,
-                    sizeof ( strArchitectureTitle ) );
-
-  // All text in the dialog box text string is copied to the dialog
-  // without any modifications
-  // dest = qstpncpy ( dest, strSelectText, sizeof ( strSelectText ) );
-
-  // All input field types (except B and K) are valid format specifiers
-  // Input fields are represented by the following combination
-  //
-  // < # hint_message # label : type : width : swidth : @hlp[] >
-  //
-  for ( int i = 0; i < ARM_ARCH_COUNT; i++ )
-  {
-    dest = qstpncpy ( dest, "<", 2 );
-    dest = qstpncpy ( dest, &architectures[i][0], sizeof ( architectures[i] ) );
-    dest = qstpncpy ( dest, ":R", 3 );
-
-    if ( i == ARM_ARCH_COUNT - 1 )
-      dest = qstpncpy ( dest, ">", 2 );
-
-    dest = qstpncpy ( dest, ">\n", 3 );
-  }
-
-  return AskUsingForm_c ( dialog_form, pArchitecture );
-}
-
-enum
-{
-  DEVICE_MANF_ATMEL = 0,
-  DEVICE_MANF_NXP,
-  DEVICE_MANF_ST,
-  DEVICE_MANF_COUNT
-};
-
-static const char manufacturers[DEVICE_MANF_COUNT][6] =
-{
-  "Atmel",
-  "NXP",
-  "ST"
-};
-
-static const char strManufacturerTitle[] = "Select Device Manufacturer\n\n";
-static const char strManufacturerHelp[] = "Select Device Manufacturer\n";
-
-static int idaapi selectManufacturer ( int * pManufacturer )
-{
-  char dialog_form[MAXSTR * 8];
-  char * dest = dialog_form;
-
-  // where number is a number of input field the cursor will stand on (0 based)
-  dest = qstpncpy ( dest, strStartItem, sizeof ( strStartItem ) );
-
-  // Help
-  dest = qstpncpy ( dest, strHelp, sizeof ( strHelp ) );
-  dest = qstpncpy ( dest, strManufacturerHelp,
-                    sizeof ( strManufacturerHelp ) );
-  dest = qstpncpy ( dest, strEndHelp, sizeof ( strEndHelp ) );
-
-  // Title : Next there must be the title line and 2 empty lines
-  dest = qstpncpy ( dest, strManufacturerTitle,
-                    sizeof ( strManufacturerTitle ) );
-
-  // All text in the dialog box text string is copied to the dialog
-  // without any modifications
-  // dest = qstpncpy ( dest, strSelectText, sizeof ( strSelectText ) );
-
-  // All input field types (except B and K) are valid format specifiers
-  // Input fields are represented by the following combination
-  //
-  // < # hint_message # label : type : width : swidth : @hlp[] >
-  //
-  for ( int i = 0; i < DEVICE_MANF_COUNT; i++ )
-  {
-    dest = qstpncpy ( dest, "<", 2 );
-    dest = qstpncpy ( dest, &manufacturers[i][0], sizeof ( manufacturers[i] ) );
-    dest = qstpncpy ( dest, ":R", 3 );
-
-    if ( i == DEVICE_MANF_COUNT - 1 )
-      dest = qstpncpy ( dest, ">", 2 );
-
-    dest = qstpncpy ( dest, ">\n", 3 );
-  }
-
-  return AskUsingForm_c ( dialog_form, pManufacturer );
-}
-
 //------------------------------------------------------------------------------
 //
 // PLUGIN DESCRIPTION BLOCK
@@ -223,6 +97,77 @@ plugin_t PLUGIN =
   IDAP_hotkey // Hot key to run the plug-in
 };
 
+typedef enum
+{
+  ARM_MANF_ATMEL,
+  ARM_MANF_NXP,
+  ARM_MANF_ST,
+  ARM_MANF_COUNT
+} arm_manf_t;
+
+typedef enum
+{
+  ARM_ARCH_ARM7_ARM9,
+  ARM_ARCH_CORTEX_M0_M1,
+  ARM_ARCH_CORTEX_M3_M4,
+  ARM_ARCH_COUNT
+} arm_arch_t;
+
+typedef struct
+{
+  uint32 arm_arch;
+  uint32 arm_manf;
+  uint32 arm_series;
+  uint32 arm_device;
+  uint32 vector;
+  uint32 sram_base;
+  uint32 sram_size;
+  uint32 action_mask;
+} arm_infomation_t;
+
+//Define the function prototype
+typedef int ( * armHelperType ) ( arm_infomation_t * arm_infomation );
+
+int armHelper ( arm_infomation_t * arm_infomation )
+{
+  int ret = 0;
+  armHelperType armHelperPtr;
+  char * pArmHelperPathAndName;
+  char armHelperPathAndName[MAXSTR];
+  HMODULE idaHandle = GetModuleHandleA ( NULL );
+  GetModuleFileNameA ( idaHandle, armHelperPathAndName, MAXSTR );
+  pArmHelperPathAndName = armHelperPathAndName;
+
+  while ( strchr ( pArmHelperPathAndName, '\\' ) )
+  {
+    pArmHelperPathAndName = strchr ( pArmHelperPathAndName, '\\' );
+    pArmHelperPathAndName++;
+  }
+
+  qstpncpy ( pArmHelperPathAndName, "plugins\\arm_helper.dll", MAXSTR );
+  msg ( "%s\n", armHelperPathAndName );
+
+  // Load the dll and keep the handle to it
+  HMODULE dllHandle = LoadLibraryA ( armHelperPathAndName );
+
+  // If the handle is valid, try to get the function address.
+  if ( dllHandle != NULL )
+  {
+    // Get pointer to our function using GetProcAddress:
+    armHelperPtr = ( armHelperType ) GetProcAddress ( dllHandle,
+                   "armHelperDialog" );
+
+    // If the function address is valid, call the function late.
+    if ( armHelperPtr != NULL )
+      ret = armHelperPtr ( arm_infomation );
+
+    // Free the library:
+    FreeLibrary ( dllHandle );
+  }
+
+  return ret;
+}
+
 //------------------------------------------------------------------------------
 //
 // The plugin method
@@ -238,61 +183,14 @@ plugin_t PLUGIN =
 // 插件可以从plugins.cfg文件中，被传进一个整型参数。
 // 当按下不同的热键或者菜单时，您需要一个插件做不同的事情时，这非常有用。
 //
-//Define the function prototype
-typedef int ( CALLBACK * ShowDialogType ) ( void );
 
 void idaapi IDAP_run ( int arg )
 {
-  // Load the dll and keep the handle to it
-  HMODULE dllHandle = LoadLibraryA ( "D:\\IDA64\\arm_helpher.dll" );
+  static arm_infomation_t arm_infomation;
 
-  if ( dllHandle == NULL )
-  {
-    msg("load failed %08X\n", GetLastError() );
+  if ( ASKBTN_YES != armHelper ( &arm_infomation ) )
     return;
-  }
 
-  // If the handle is valid, try to get the function address.
-  // Get pointer to our function using GetProcAddress:
-  ShowDialogType showDialogPtr = ( ShowDialogType ) GetProcAddress ( dllHandle,
-                                 "showDialog" );
-
-  // If the function address is valid, call the function.
-  if ( showDialogPtr != NULL )
-    showDialogPtr();
-
-  // Free the library:
-  FreeLibrary(dllHandle); 
-
-  static int architecture = ARM_TYPE_DEVICE;
-  static int manufacturer = DEVICE_MANF_ST;
-
-  while ( 1 )
-  {
-    if ( 0 == selectArchitecture ( &architecture ) )
-      return;
-
-    if ( architecture == ARM_TYPE_DEVICE )
-    {
-      if ( 0 == selectManufacturer ( &manufacturer ) )
-        continue;
-    }
-
-    switch ( architecture )
-    {
-      case ARM_TYPE_DEVICE:
-        break;
-
-      case ARM_TYPE_ARM7_ARM9:
-        break;
-
-      case ARM_TYPE_CORTEX_M0_M1:
-        break;
-
-      case ARM_TYPE_CORTEX_M3_M4:
-        break;
-    }
-  }
 }
 
 

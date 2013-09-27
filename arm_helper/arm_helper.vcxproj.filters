@@ -39,6 +39,9 @@
     <ClCompile Include="sources\arm_helper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="sources\showDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sources\ida_cortex_m3.h">

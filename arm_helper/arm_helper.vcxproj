@@ -19,6 +19,7 @@
     <ClCompile Include="sources\ida_stm32f10x.cpp" />
     <ClCompile Include="sources\ida_stm32f10x_struct.cpp" />
     <ClCompile Include="sources\ida_stm32f10x_vector.cpp" />
+    <ClCompile Include="sources\showDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sources\ida_cortex_m3.h" />
