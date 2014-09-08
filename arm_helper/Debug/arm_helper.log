@@ -1,32 +1,5 @@
-﻿  showDialog.cpp
+﻿  arm_helper.cpp
 c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
           c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  ida_stm32f10x_vector.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  ida_stm32f10x_struct.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  ida_stm32f10x.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  ida_name_vector.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  ida_name_register.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  ida_cortex_m3_struct.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  ida_cortex_m3.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\plugins\arm-helper\arm_helper\sources\ida_cortex_m3.cpp(293): warning C4996: 'SetDefaultRegisterValue': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\srarea.hpp(213) : see declaration of 'SetDefaultRegisterValue'
-  arm_helper.cpp
-c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(316): warning C4996: 'set_member_ti': was declared deprecated
-          c:\hex-rays.ida.pro.advanced.v6.5\idasdk\include\struct.hpp(315) : see declaration of 'set_member_ti'
-  Generating Code...
 C:\Program\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Hex-Rays.IDA.Pro.Advanced.v6.5\idasdk\plugins\arm-helper\Debug\arm_helper.plw) does not match the Linker's OutputFile property value (C:\Hex-Rays.IDA.Pro.Advanced.v6.5\idasdk\plugins\arm-helper\arm_helper\arm_helper.plw). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
   arm_helper.vcxproj -> C:\Hex-Rays.IDA.Pro.Advanced.v6.5\idasdk\plugins\arm-helper\Debug\arm_helper.plw

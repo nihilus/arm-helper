@@ -52,7 +52,7 @@ int idaapi IDAP_init ( void )
   // Only support ARM architecture
   if ( strncmp ( inf.procName, "ARM", 3 ) != 0 )
   {
-    warning ( "Only support ARM architecture, sorry." );
+    //warning ( "Only support ARM architecture, sorry." );
     return PLUGIN_SKIP;
   }
 
