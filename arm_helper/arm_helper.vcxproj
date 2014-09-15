@@ -64,10 +64,14 @@
     <TargetExt>.plw</TargetExt>
     <IncludePath>../../../include;C:\Program\boost\boost_1_54_0;$(IncludePath)</IncludePath>
     <LibraryPath>../../../lib/x86_win_vc_32;C:\Program\boost\boost_1_54_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <OutDir />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.plw</TargetExt>
+    <IncludePath>../../../include;C:\Program\boost\boost_1_54_0;$(IncludePath)</IncludePath>
+    <LibraryPath>../../../lib/x86_win_vc_32;C:\Program\boost\boost_1_54_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <OutDir />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -85,7 +89,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(ProjectName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>ida.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/EXPORT:PLUGIN %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -110,8 +114,8 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>D:\IDA64\plugins\$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>D:\IDA64\idasdk64\lib\x86_win_vc_32\ida.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(ProjectName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>ida.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/EXPORT:PLUGIN %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
