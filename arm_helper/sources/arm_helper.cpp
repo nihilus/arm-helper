@@ -144,7 +144,7 @@ int armHelper ( arm_infomation_t * arm_infomation )
     pArmHelperPathAndName++;
   }
 
-  qstpncpy ( pArmHelperPathAndName, "plugins\\arm_helper.dll", MAXSTR );
+  qstpncpy ( pArmHelperPathAndName, "plugins\\arm_helper.plw", MAXSTR );
   msg ( "%s\n", armHelperPathAndName );
 
   // Load the dll and keep the handle to it
